@@ -48,9 +48,9 @@ package main
 
 import (
   "fmt"
-  "io/ioutil"
-  "net"
   "os"
+  "io"
+  "net"
 )
 
 func main() {
@@ -70,8 +70,9 @@ func main() {
   // хүсэлт илгээх
   _, err = conn.Write([]byte("HEAD / HTTP/1.0\r\n\r\n"))
   checkError(err)
+  
   // хариу мэдээллийг унших
-  result, err := ioutil.ReadAll(conn)
+  result, err := io.ReadAll(conn)
   checkError(err)
 
   // авсан хариуг дэлгэцэнд хэвлэж харуулах

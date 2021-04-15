@@ -49,9 +49,8 @@
 
    import (
     "fmt"
-    "io/ioutil"
     "net"
-    "os"
+    "io"
    )
 
    func main() {
@@ -63,7 +62,7 @@
     checkError(err)
 
     // серверээс мэдээлэл унших
-    result, err := ioutil.ReadAll(conn)
+    result, err := io.ReadAll(conn)
     checkError(err)
 
     // авсан хариуг дэлгэцэнд хэвлэж харуулах
@@ -88,13 +87,13 @@
    a\) Илгээсэн файлын агуулгыг `http.Request` обектын `Body` талбараас уншиж болно.
 
    ```go
-   body, err = ioutil.ReadAll(r.Body)
+   body, err = io.ReadAll(r.Body)
    ```
 
-   b\) Уншсан өгөгдлөө файл руу бичихэд `ioutil.WriteFile()` функцийг ашиглаж болно.
+   b\) Уншсан өгөгдлөө файл руу бичихэд `os.WriteFile()` функцийг ашиглаж болно.
 
    ```go
-   err = ioutil.WriteFile("upload.dat", body, 0700)
+   err = os.WriteFile("upload.dat", body, 0700)
    ```
 
    Ингээд `Upload` функцээ http үйлчилгээнд бүртгэх хэрэгтэй.

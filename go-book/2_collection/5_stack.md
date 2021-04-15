@@ -5,53 +5,47 @@
 * Push – стекийн орой дээр элемент нэмэх
 * Pop – стекийн оройноос элемент сугалах
 
-Дараах жишээнд стек хэрхэн үүсгэж, ашиглахыг харуулав.
+Дараах жишээнд тоон стек хэрхэн үүсгэж, ашиглахыг харуулав.
 
 ```go
 package main
 import "fmt"
 
-type Stack struct {
-	top *Element
-	size int
-}
-
-type Element struct {
-	value interface{}
-	next *Element
+type IntStack struct {
+	elems []int
 }
 
 // стекийн урт
-func (s *Stack) Len() int {
-	return s.size
+func (s *IntStack) Len() int {
+	return len(s.elems)
 }
 
 // стекийн оройд элемент нэмэх
-func (s *Stack) Push(value interface{}) {
-	s.top = &Element{value, s.top}
-	s.size++
+func (s *IntStack) Push(value int) {
+	s.elems = append(s.elems, value)
 }
 
 // стекийн оройгоос элемент авах
-func (s *Stack) Pop() (value interface{}) {
-	if s.size > 0 {
-		value, s.top = s.top.value, s.top.next
-		s.size--
-		return
+func (s *IntStack) Pop() int {
+	if len(s.elems) == 0 {
+		panic("stack is empty")
 	}
-	return nil
+
+	top := len(s.elems) - 1
+	value := s.elems[top]
+	s.elems = s.elems[:top]
+	return value
 }
 
 func main() {
-	stack := new(Stack)
+	stack := new(IntStack)
 
-	stack.Push("Things")
-	stack.Push("and")
-	stack.Push("Stuff")
+	stack.Push(1)
+	stack.Push(2)
+	stack.Push(3)
 
 	for stack.Len() > 0 {
-		fmt.Printf("%s ", stack.Pop().(string))
+		fmt.Printf("%d ", stack.Pop())
 	}
-	fmt.Println()
 }
 ```

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -17,7 +17,7 @@ var (
 func crawl(folder string, ch chan string) {
 	fmt.Println("scanning ", folder)
 
-	files, _ := ioutil.ReadDir(folder)
+	files, _ := os.ReadDir(folder)
 
 	for _, f := range files {
 

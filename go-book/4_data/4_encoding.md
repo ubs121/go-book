@@ -172,16 +172,18 @@ Go хэлний обектыг XML уруу хувиргахын тулд дар
 ```go
 type Person struct {
   XMLName Name     `xml:"person"`
-  Name Name         `xml:"name"`
-  Email []Email     `xml:"email"`
+  Name Name        `xml:"name"`
+  Email []Email    `xml:"email"`
 }
+
 type Name struct {
-  First string     `xml:"first"`
+  First string    `xml:"first"`
   Last string     `xml:"last"`
 }
+
 type Email struct {
   Type string     `xml:"type,attr"`
-  Address string     `xml:",chardata"`
+  Address string  `xml:",chardata"`
 }
 ```
 
@@ -202,19 +204,7 @@ import (
   "os"
 )
 
-type Person struct {
-  XMLName Name     `xml:"person"`
-  Name Name         `xml:"name"`
-  Email []Email     `xml:"email"`
-}
-type Name struct {
-  First string     `xml:"first"`
-  Last string     `xml:"last"`
-}
-type Email struct {
-  Type string     `xml:"type,attr"`
-  Address string     `xml:",chardata"`
-}
+// Person, Name, Email төрлүүд энд байрлана
 
 func main() {
   str := `<?xml version="1.0" encoding="utf-8"?>
@@ -238,8 +228,7 @@ func main() {
 
 func checkError(err error) {
   if err != nil {
-    fmt.Println("Алдаа ", err.Error())
-    os.Exit(1)
+    panic(err)
   }
 }
 ```
@@ -316,10 +305,12 @@ type Person struct {
  Name  Name
  Email []Email
 }
+
 type Name struct {
   First string
   Last string
 }
+
 type Email struct {
   Kind  string
   Address string
@@ -345,8 +336,7 @@ func saveGob(fileName string, key interface{}) {
 
 func checkError(err error) {
   if err != nil {
-     fmt.Println("Алдаа ", err.Error())
-    os.Exit(1)
+    panic(err)
   }
 }
 ```

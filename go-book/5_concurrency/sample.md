@@ -40,7 +40,7 @@
    ```go
    // хавтасаар самнах
    func crawl(folder string, ch chan string) {
-      files, _ := ioutil.ReadDir(folder)
+      files, _ := os.ReadDir(folder)
 
       for _, f := range files {
 

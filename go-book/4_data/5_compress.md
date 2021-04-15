@@ -8,7 +8,7 @@ package main
 import (
   "archive/zip"
   "bytes"
-  "io/ioutil"
+  "os"
   "log"
 )
 
@@ -44,7 +44,7 @@ func main() {
     }
 
     // zip өгөгдлийг файлд бичих
-    ioutil.WriteFile("readme.zip", buf.Bytes(), 0777)
+    os.WriteFile("readme.zip", buf.Bytes(), 0777)
 }
 ```
 
