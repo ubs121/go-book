@@ -35,26 +35,28 @@ ok      go-book/math      0.032s
 package math
 import "testing"
 
-type testpair struct {
-    values []float64
-    average float64
-}
-
-// тестийн оролт болон гаралтын утгууд
-var tests = []testpair{
-    { []float64{1,2}, 1.5 },
-    { []float64{1,1,1,1,1,1}, 1 },
-    { []float64{-1,1}, 0 },
-}
-
 func TestAverage(t *testing.T) {
-    for _, pair := range tests {
-        v := Average(pair.values)
-        if v != pair.average {
+    // тестэд туслах шинэ төрөл
+    type testpair struct {
+        values []float64
+        expected float64
+    }
+
+    // тестийн оролт болон гаралтын утгууд
+    var testCases = []testpair{
+        { []float64{1,2}, 1.5 },
+        { []float64{1,1,1,1,1,1}, 1 },
+        { []float64{-1,1}, 0 },
+    }
+
+    for _, tc := range testCases {
+        got := Average(tc.values) // функцийг дуудах
+
+        if got != tc.expected {
             t.Error(
-                "Оролт & Гаралт", pair.values,
-                "Хүлээх үр дүн", pair.average,
-                "Бодит үр дүн", v,
+                "Тест өгөгдөл", tc.values,
+                "Хүлээх үр дүн", tc.expected,
+                "Гарсан үр дүн", got,
             )
         }
     }

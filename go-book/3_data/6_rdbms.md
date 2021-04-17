@@ -25,15 +25,15 @@ Go хэлний `database/sql` сан нь SQL төрлийн өгөгдлийн
 ```go
 db, err := sql.Open(driver, dataSourceName)
 ```
-sql.Open функцэд дамжуулах эхний аргумент нь драйверын нэр байна.
+
+sql.Open() функцэд дамжуулах эхний аргумент нь драйверын нэр байна.
 Хоёр дахь аргумент нь өгөгдлийн санд хэрхэн хандахыг драйверт мэдээлнэ.
 
 Жишээлбэл локал машины MySQL сервер дээр байгаа `hello` бааз руу холболт үүсгэе.
 
 ```go
 func main() {
-    db, err := sql.Open("mysql",
-        "user:password@tcp(127.0.0.1:3306)/hello")
+    db, err := sql.Open("mysql", "user:password@tcp(127.0.0.1:3306)/hello")
     if err != nil {
         log.Fatal(err)
     }
