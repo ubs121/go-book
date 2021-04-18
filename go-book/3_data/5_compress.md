@@ -13,9 +13,8 @@ import (
 )
 
 func main() {
-    buf := new(bytes.Buffer)
-
     // шинэ zip буфер үүсгэх
+    buf := new(bytes.Buffer)
     w := zip.NewWriter(buf)
 
     // архивт нэмэх файлууд
@@ -70,17 +69,20 @@ func main() {
 
     // Архив дахь файлуудаар давтаж агуулгыг хэвлэх
     for _, f := range r.File {
-            fmt.Printf("'%s' файлын агуулга:\n", f.Name)
-            rc, err := f.Open()
-            if err != nil {
-               log.Fatal(err)
-            }
+        fmt.Printf("'%s' файлын агуулга:\n", f.Name)
+        
+        rc, err := f.Open()
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        // дэлгэц рүү хуулах
         _, err = io.Copy(os.Stdout, rc)
-            if err != nil {
-                log.Fatal(err)
-            }
-            println()
-            rc.Close()
+        if err != nil {
+            log.Fatal(err)
+        }
+        println()
+        rc.Close()
     }
 }
 ```
