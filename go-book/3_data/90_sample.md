@@ -32,7 +32,7 @@
   )
 
   func main() {
-  	txt := "Та ubs121@gmail.com, ub121@hotmail.com хаягуудаар холбоо барьж болно."
+  	txt := "Та ub@gmail.com, ub@hotmail.com хаягуудаар холбоо барьж болно."
 
   	re, _ := regexp.Compile(`\w+@\w+\.\w+`)
   	all := re.FindAllString(txt, -1)
