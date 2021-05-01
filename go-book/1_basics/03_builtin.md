@@ -102,10 +102,11 @@ import "fmt"
 var x string = "Hello World"
 
 func main() {
-    fmt.Println(x)
+    fmt.Println(x) // энд 'x'-г ашиглаж болно
 }
+
 func f() {
-    fmt.Println(x)
+    fmt.Println(x) // мөн энд 'x' хүчинтэй
 }
 ```
 
@@ -119,6 +120,7 @@ func main() {
     var x string = "Hello World"
     fmt.Println(x)
 }
+
 func f() {
     // АЛДАА: x хувьсагчид эндээс хандах боломжгүй
     fmt.Println(x)
