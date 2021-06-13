@@ -69,34 +69,41 @@ import (
 )
 
 type Person struct {
- Name  Name
- Email []Email
+  XMLName Name     `xml:"person" json:"person"`
+  Name Name        `xml:"name"`
+  Email []Email    `xml:"email"`
 }
+
 type Name struct {
-  First string
-  Last string
+  First string    `xml:"first" json:"firstName"`
+  Last string     `xml:"last" json:"lastName"`
 }
+
 type Email struct {
-  Kind string
-  Address string
+  Type string     `xml:"type,attr"`
+  Address string  `xml:",chardata"`
 }
 
-func main() {
- person := Person{
+func getPerson() Person {
+  // өгөгдөл
+  person := Person{
   Name: Name{First: "Ууганбаяр", Last: "Сүхбаатар"},
-  Email: []Email{Email{Kind: "хувийн", Address: "ub@gmail.com"},
-         Email{Kind: "ажлын", Address: "ub@hotmail.com"}}}
-
-  saveJSON("person.json", person)
+  Email: []Email{
+          {Kind: "хувийн", Address: "ub@gmail.com"},
+          {Kind: "ажлын", Address: "ub@hotmail.com"},
+        }
+  }
+  return person
 }
 
-func saveJSON(fileName string, key interface{}) {
-  outFile, err := os.Create(fileName)
+func saveJSONSample() {
+  outFile, err := os.Create("person.json")
   checkError(err)
+  defer outFile.Close()
+
   encoder := json.NewEncoder(outFile)
-  err = encoder.Encode(key)
+  err = encoder.Encode(getPerson())
   checkError(err)
-  outFile.Close()
 }
 
 func checkError(err error) {
@@ -111,7 +118,7 @@ func checkError(err error) {
 
 ```go
 func loadJSON(fileName string, key interface{}) {
-  inFile, err := os.Open(fileName)
+  inFile, err := os.Open("person.json")
   checkError(err)
   decoder := json.NewDecoder(inFile)
   err = decoder.Decode(key)
@@ -120,60 +127,17 @@ func loadJSON(fileName string, key interface{}) {
 }
 ```
 
-Дээрх функцэд файлын нэр, үр дүнг хадгалах обектыг дамжуулж дуудна:
-
-```go
-loadJSON("person.json", &person)
-```
-
 ## XML бүтцээр кодлох
 
 XML нь мөн нийлмэл өгөгдлийг текстэн хэлбэрт хувиргахад маш өргөн ашиглагддаг бүтэц юм. Жишээлбэл Open Document, Microsoft Word файлууд, SVG зургийг XML бүтцээр кодлон файлд хадгалсан байдаг. Бидний сайн мэдэх HTML хэл нь XML дээр суурилсан, MathML болон CML \(Chemistry Markup Language\) зэрэг хэлүүд XML дээр суурилсан гэх мэтээр жишээ маш олныг нэрлэж болно. Мөн байгууллага хооронд мэдээлэл солилцоход өргөн ашиглагддаг веб үйлчилгээний SOAP протокол нь XML дээр суурилсан байдаг.
 
 XML  бүтэц нь таагуудаас тогтоно. Таагууд бие биенээ агуулж болно, тааг нь атрибуттай байж болно. Жишээлбэл бидний өмнө үзсэн `Person` обектыг XML бүтэц уруу хувиргавал дараах байдалтай харагдана.
 
-```xml
-<person>
-<name>
-  <first>Ууганбаяр</first>
-  <last>Сүхбаатар</last>
-</name>
-<email type="хувийн">
-  ub@gmail.com
-</email>
-<email type="ажлын">
-  ub@hotmail.com
-</email>
-</person>
-```
-
-Обектыг XML уруу хувиргахын тулд дараах байдлаар бага зэрэг нэмэлт тохируулга хийх хэрэгтэй.
-
-```go
-type Person struct {
-  XMLName Name     `xml:"person"`
-  Name Name        `xml:"name"`
-  Email []Email    `xml:"email"`
-}
-
-type Name struct {
-  First string    `xml:"first"`
-  Last string     `xml:"last"`
-}
-
-type Email struct {
-  Type string     `xml:"type,attr"`
-  Address string  `xml:",chardata"`
-}
-```
-
 Энд харуулснаар дараах дүрмээр хувиргалт хийнэ:
 
 * талбарыг XML тааг болгон кодлох бол талбарын ард таагийн нэрийг \`\` хашилтад бичнэ
 * талбарыг XML атрибут болгон кодлох бол `xml:tag,attr` бичиглэлийг ашиглана.
   бүтцийн нэрийг кодлох бол XMLName нэртэй талбар үүсгэж ард нь таагийн нэрийг тохируулна.
-
-XML бүтцээс задалж унших жишээ програм:
 
 ```go
 package main
@@ -212,6 +176,36 @@ func checkError(err error) {
   }
 }
 ```
+
+## gob бүтцээр кодлох
+
+Gob нь зөвхөн Go хэлэнд байдаг өгөгдөл хувиргах арга юм. Энэ бүтэц нь өгөгдлийн төрлүүдийг хувиргах, зөөвөрлөх, хадгалахад зориулагдсан бөгөөд бусад хэлэнд одоогоор ашиглах боломжгүй тусгай бүтэц юм.
+
+Gob нь суваг, функц, интерфэйсээс бусад Go хэлний бүх төрлийн өгөгдлийг хувиргаж чадна. Үүнд бүхэл тоон өгөгдөл, тэмдэг мөр, логик утга, struct, массив зэрэг багтана.
+
+Gob нь өгөгдлийн төрлийн мэдээллийг өгөгдөл дотор оруулж кодлодог. Энэ талаараа ASN бүтцээс их хэмжээтэй болдог, гэхдээ XML бүтэцтэй харьцуулахад бага хэмжээтэй байдаг. Өгөгдлийн төрлийн мэдээлэлд обектын төрөл, талбаруудын нэрс багтана.
+
+Өгөгдлийн төрлийг багтааж кодлосноор өөрчлөлт орсон ч илүү тогвортой ажиллах баталгаатай болох юм. Тухайлбал обектын талбарын байрлал солигдсон ч нэрээр нь талбаруудыг зөв тайлж уншиж чадна.
+
+Gob бүтцээр өгөгдөл кодлохын тулд `Encoder` обект үүсгэх хэрэгтэй. Энэ обектын `Encode()` функц нь өгөгдөл кодлоход ашиглагдана. Энэ функцийг хэдэн ч удаа дуудаж болно, энэ үед өгөгдлийн төрлийн талаархи мэдээлэл нь нэг л удаа бичигддэг.
+
+Дараах програм нь хүмүүсийн мэдээллийг gob бүтэц уруу хувирган файлд бичнэ.
+
+```go
+func saveGobSample() {
+  // файл үүсгэх
+  outFile, err := os.Create("person.gob")
+  checkError(err)
+  defer outFile.Close()
+
+  // энкодлогч үүсгэх
+  encoder := gob.NewEncoder(outFile)
+  // өгөгдлийг бичих
+  err = encoder.Encode(getPerson())
+  checkError(err)
+}
+```
+
 
 ## ASN бүтцээр кодлох
 
@@ -258,67 +252,7 @@ func checkError(err error) {
 
 ASN бүтцийн талаар нарийн судлахыг тулд түүний стандартыг сайтар судлах хэрэгтэй. Тухайлбал ASN стандартад өгөгдлийг төрөлжүүлсэн байдаг. Эдгээрийн талаар нарийн судлахыг хүсвэл Олон Улсын Харилцаа Холбооны Хорооны \(ITU-T\) стандартчилсан баримтуудыг үзээрэй.
 
-## gob бүтцээр кодлох
 
-Gob нь зөвхөн Go хэлэнд байдаг өгөгдөл хувиргах арга юм. Энэ бүтэц нь өгөгдлийн төрлүүдийг хувиргах, зөөвөрлөх, хадгалахад зориулагдсан бөгөөд бусад хэлэнд одоогоор ашиглах боломжгүй тусгай бүтэц юм.
-
-Gob нь суваг, функц, интерфэйсээс бусад Go хэлний бүх төрлийн өгөгдлийг хувиргаж чадна. Үүнд бүхэл тоон өгөгдөл, тэмдэг мөр, логик утга, struct, массив зэрэг багтана.
-
-Gob нь өгөгдлийн төрлийн мэдээллийг өгөгдөл дотор оруулж кодлодог. Энэ талаараа ASN бүтцээс их хэмжээтэй болдог, гэхдээ XML бүтэцтэй харьцуулахад бага хэмжээтэй байдаг. Өгөгдлийн төрлийн мэдээлэлд обектын төрөл, талбаруудын нэрс багтана.
-
-Өгөгдлийн төрлийг багтааж кодлосноор өөрчлөлт орсон ч илүү тогвортой ажиллах баталгаатай болох юм. Тухайлбал обектын талбарын байрлал солигдсон ч нэрээр нь талбаруудыг зөв тайлж уншиж чадна.
-
-Gob бүтцээр өгөгдөл кодлохын тулд `Encoder` обект үүсгэх хэрэгтэй. Энэ обектын `Encode()` функц нь өгөгдөл кодлоход ашиглагдана. Энэ функцийг хэдэн ч удаа дуудаж болно, энэ үед өгөгдлийн төрлийн талаархи мэдээлэл нь нэг л удаа бичигддэг.
-
-Дараах програм нь хүмүүсийн мэдээллийг gob бүтэц уруу хувирган файлд бичнэ.
-
-```go
-package main
-
-import (
-  "encoding/gob"
-  "fmt"
-  "os"
-)
-
-type Person struct {
- Name  Name
- Email []Email
-}
-
-type Name struct {
-  First string
-  Last string
-}
-
-type Email struct {
-  Kind  string
-  Address string
-}
-
-func main() {
- person := Person{
-  Name: Name{First: "Ууганбаяр", Last: "Сүхбаатар"},
-  Email: []Email{Email{Kind: "хувийн", Address: "ubs121@gmail.com"},
-         Email{Kind: "ажлын", Address: "ub@hotmail.com"}}}
-
-  saveGob("person.gob", person)
-}
-
-func saveGob(fileName string, key interface{}) {
-  outFile, err := os.Create(fileName)
-  checkError(err)
-  encoder := gob.NewEncoder(outFile)
-  err = encoder.Encode(key)
-  checkError(err)
-  outFile.Close()
-}
-
-func checkError(err error) {
-  if err != nil {
-    panic(err)
-  }
-}
 ```
 
 ## base64 энкодлолт
