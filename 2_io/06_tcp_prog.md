@@ -37,7 +37,7 @@ Server: lighttpd/1.4.23
 Програмаа `GetHeadInfo.go` гэж нэрлээд дараах байдлаар ажиллуулна гэж тооцоё.
 
 ```sh
-GetHeadInfo www.google.com:80
+./GetHeadInfo www.google.com:80
 ```
 
 Програмын бүрэн эх кодыг доор харуулав.

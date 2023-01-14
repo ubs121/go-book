@@ -101,11 +101,8 @@ type Person struct {
 Харин методууд нь тухайн төрлийн “чадвар”, “зан байдлыг” илэрхийлдэг. Жишээлбэл `Person` төрөлд `Talk()` функц нэмэе. Эндээс “хүн ярьж чаддаг” гэсэн чадвар харагдах болно.
 
 ```go
-type Person struct {
-
-    func (p *Person) Talk() {
-        fmt.Println("Сайна уу, Миний нэр ", p.Name)
-    }
+func (p *Person) Talk() {
+    fmt.Println("Сайна уу, Миний нэр ", p.Name)
 }
 ```
 

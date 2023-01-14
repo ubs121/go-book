@@ -1,6 +1,8 @@
 package basics
 
-import "testing"
+import (
+	"testing"
+)
 
 func Greeting(prefix string, who ...string) {
 	print(prefix, " ")

@@ -32,3 +32,7 @@ func TestSort(t *testing.T) {
 	sort.Sort(ByName(kids))
 	fmt.Println(kids)
 }
+
+func (p *Person) Talk() {
+	fmt.Println("Сайна уу, Миний нэр ", p.Name)
+}
