@@ -5,6 +5,28 @@ import (
 	"testing"
 )
 
+type TreeNode struct {
+	Value int       // зангилаан дээрх утга
+	Left  *TreeNode // зүүн зангилаа
+	Right *TreeNode // баруун зангилаа
+}
+
+func TestTreeCreate(t *testing.T) {
+	root := &TreeNode{
+		Value: 5,
+		Left: &TreeNode{
+			Value: 4,
+			Left:  &TreeNode{Value: 3},
+			Right: &TreeNode{Value: 3},
+		},
+		Right: &TreeNode{Value: 2,
+			Left:  &TreeNode{Value: 7},
+			Right: nil,
+		},
+	}
+	fmt.Println(root)
+}
+
 // модны нэг зангилаа
 type Node struct {
 	Left, Right *Node

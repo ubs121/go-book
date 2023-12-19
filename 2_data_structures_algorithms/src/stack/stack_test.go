@@ -1,7 +1,6 @@
 package common
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -10,17 +9,12 @@ type Stack[T any] struct {
 	elems []T
 }
 
-// стекийн урт
-func (s *Stack[T]) Len() int {
-	return len(s.elems)
-}
-
-// стекийн оройд элемент нэмэх
+// стайкийн оройд элемент нэмэх
 func (s *Stack[T]) Push(value T) {
 	s.elems = append(s.elems, value)
 }
 
-// стекийн оройгоос элемент авах
+// стайкийн оройгоос элемент авах
 func (s *Stack[T]) Pop() T {
 	if len(s.elems) == 0 {
 		panic("stack is empty")
@@ -32,6 +26,10 @@ func (s *Stack[T]) Pop() T {
 	return value
 }
 
+func (s *Stack[T]) IsEmpty() bool {
+	return len(s.elems) == 0
+}
+
 func TestStack(t *testing.T) {
 	stack := new(Stack[int])
 
@@ -39,8 +37,8 @@ func TestStack(t *testing.T) {
 	stack.Push(2)
 	stack.Push(3)
 
-	for stack.Len() > 0 {
-		fmt.Printf("%d ", stack.Pop())
+	for !stack.IsEmpty() {
+		println(stack.Pop())
 	}
 }
 

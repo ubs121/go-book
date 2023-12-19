@@ -9,10 +9,10 @@ package math
 import "testing"
 
 func TestAverage(t *testing.T) {
-    var v float64
-    v = Average([]float64{1, 2})
-    if v != 1.5 {
-        t.Error("Хүлээх үр дүн 1.5, Бодит үр дүн ", v)
+    exp:= 1.5
+    got := Average([]float64{1, 2})
+    if got != exp {
+        t.Error("Хүлээх үр дүн %f, Бодит үр дүн %f", exp, got)
     }
 }
 ```
@@ -36,27 +36,27 @@ package math
 import "testing"
 
 func TestAverage(t *testing.T) {
-    // тестийн оролт болон гаралтын утгууд
-    var testCases = []struct {
-        values []float64
-        expected float64
-    }{
-        { []float64{1,2}, 1.5 },
-        { []float64{1,1,1,1,1,1}, 1 },
-        { []float64{-1,1}, 0 },
-    }
+	// тестийн оролт болон гаралтын утгууд
+	var testCases = []struct {
+		values   []float64
+		expected float64
+	}{
+		{values: []float64{1, 2}, expected: 1.5},
+		{values: []float64{1, 1, 1, 1, 1, 1}, expected: 1},
+		{values: []float64{-1, 1}, expected: 0},
+	}
 
-    for _, tc := range testCases {
-        got := Average(tc.values) // функцийг дуудах
+	for _, tc := range testCases {
+		got := Average(tc.values) // функцийг дуудах
 
-        if got != tc.expected {
-            t.Error(
-                "Тест өгөгдөл", tc.values,
-                "Хүлээх үр дүн", tc.expected,
-                "Гарсан үр дүн", got,
-            )
-        }
-    }
+		if got != tc.expected {
+			t.Error(
+				"Тест өгөгдөл", tc.values,
+				"Хүлээх үр дүн", tc.expected,
+				"Гарсан үр дүн", got,
+			)
+		}
+	}
 }
 ```
 

@@ -2,11 +2,18 @@ package sort
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"testing"
 )
 
 func TestSortSlice(t *testing.T) {
+	numbers := []int{5, 2, 6, 3, 1, 4}
+	slices.Sort(numbers)
+
+	colors := []string{"улаан", "ногоон", "цэнхэр"}
+	slices.Sort(colors)
+
 	people := []struct {
 		Name string
 		Age  int
@@ -33,23 +40,31 @@ type Person struct {
 
 type ByName []Person
 
-func (this ByName) Len() int {
-	return len(this)
+func (p ByName) Len() int {
+	return len(p)
 }
-func (this ByName) Less(i, j int) bool {
-	return this[i].Name < this[j].Name
+func (p ByName) Less(i, j int) bool {
+	return p[i].Name < p[j].Name
 }
-func (this ByName) Swap(i, j int) {
-	this[i], this[j] = this[j], this[i]
+func (p ByName) Swap(i, j int) {
+	p[i], p[j] = p[j], p[i]
 }
 
 func TestSortPerson(t *testing.T) {
 	kids := []Person{
-		{"Бат", 9},
-		{"Болд", 9},
 		{"Амар", 10},
+		{"Болд", 9},
+		{"Батаа", 9},
 	}
 	sort.Sort(ByName(kids))
+
+	// sort.Slice(kids, func(i, j int) bool {
+	// 	if kids[i].Age != kids[j].Age {
+	// 		return kids[i].Age < kids[j].Age
+	// 	}
+	// 	return kids[i].Name < kids[j].Name
+	// })
+
 	fmt.Println(kids)
 }
 

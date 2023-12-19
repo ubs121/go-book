@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"testing"
-	"time"
 )
 
 const queueSize = 3
@@ -41,30 +40,32 @@ func readDataJson(f io.Reader, msgChan chan *Message) error {
 	return nil
 }
 
-func circQueue(size int, in chan *Message, reader chan *Message) {
-	rb := make([]*Message, size)
-	writeIndex := 0
-	readIndex := 0
+func circularQueue[T any](size int, producer chan *T, consumer chan *T) {
+	rb := make([]*T, size) // дундын нөөц (ring buffer)
+	writeIndex := 0        // бичих байрлал
+	readIndex := 0         // унших байрлал
 
 	for {
 		select {
-		case m := <-in: // try to read from 'in'
+		case m := <-producer: // 'producer' сувгаас уншихыг оролдох
 			if m != nil {
-				// add into the queue
+				// тойрогт нэмэх
 				rb[writeIndex%size] = m
 				writeIndex++
 			}
 		default:
-			// write/feed the reader forever
+			//  унших өгөгдөл байхгүй тохиолдолд
+			// 'consumer' суваг руу илгээхийг оролдох
+
+			// дараагийн илгээх өгөгдөл
 			m := rb[readIndex%size]
 			if m != nil {
-				reader <- m
+				consumer <- m // илгээх
 				readIndex++
 
-				// sleep
-				time.Sleep(100 * time.Millisecond)
+				// завсарлага
+				// time.Sleep(100 * time.Millisecond)
 			}
-
 		}
 	}
 }
@@ -90,7 +91,7 @@ func TestReadDataJson(t *testing.T) {
 
 	// start the ring buffer service
 	go func() {
-		circQueue(queueSize, msgChan, outChan)
+		circularQueue(queueSize, msgChan, outChan)
 	}()
 
 	// start consuming

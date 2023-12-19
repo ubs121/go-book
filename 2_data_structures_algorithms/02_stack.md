@@ -1,51 +1,45 @@
-## Стек
+## Стайк
 
-Стек нь “эхэлж орсон нь эхэлж гарах” зарчим дээр тулгуурласан жагсаалт төрлийн өгөгдлийн бүтэц юм. Стек бүтэц дээр дараах хоёр үйлдэл хийгдэнэ:
+Стайк нь "эхэлж орсон нь эхэлж гарах" зарчим дээр тулгуурласан жагсаалт төрлийн өгөгдлийн бүтэц юм. Стайк дээр дараах хоёр үйлдэл хийгдэнэ:
 
-* Push – стекийн орой дээр элемент нэмэх
-* Pop – стекийн оройноос элемент сугалах
+* Push – стайкийн оройд элемент нэмэх
+* Pop – стайкийн оройгоос элемент сугалах
 
-Дараах жишээнд тоон стек хэрхэн үүсгэж, ашиглахыг харуулав.
+Дараах жишээнд өгөгдсөн илэрхийлэл дэх хаалтууд тэнцвэртэй эсэхийг стайк ашиглан хэрхэн шалгаж болохыг харуулав.
 
 ```go
-package main
-import "fmt"
-
-type Stack[T any] struct {
-	elems []T
-}
-
-// стекийн урт
-func (s *Stack[T]) Len() int {
-	return len(s.elems)
-}
-
-// стекийн оройд элемент нэмэх
-func (s *Stack[T]) Push(value T) {
-	s.elems = append(s.elems, value)
-}
-
-// стекийн оройгоос элемент авах
-func (s *Stack[T]) Pop() T {
-	if len(s.elems) == 0 {
-		panic("stack is empty")
+func isValidBrackets(expr string) bool {
+	if len(expr) == 0 {
+		return true
 	}
 
-	topIdx := len(s.elems) - 1
-	value := s.elems[topIdx]
-	s.elems = s.elems[:topIdx]
-	return value
-}
+	// тэмдэгтийн стайк
+	var stk []byte
 
-func main() {
-	stack := new(Stack[int])
+	// бүх тэмдэгтээр гүйж шалгах
+	for i := 0; i < len(expr); i++ {
+		switch expr[i] {
+		case '(':
+			stk = append(stk, '(') // Push хийх
+		case ')':
+			// стайк хоосон эсэхийг шалгах
+			if len(stk) == 0 {
+				return false
+			}
 
-	stack.Push(1)
-	stack.Push(2)
-	stack.Push(3)
-
-	for stack.Len() > 0 {
-		fmt.Printf("%d ", stack.Pop())
+			// оройн элементийг сугалж шалгах - Pop хийх
+			c := stk[len(stk)-1]
+			stk = stk[:len(stk)-1]
+			if c != '(' {
+				return false
+			}
+		default:
+			// цааш үргэлжлүүлэх
+		}
 	}
+
+	// хэрэв стайк хоосон бол хаалтууд тэнцвэртэй,
+	// эсрэг тохиолдолд хаалтууд тэнцвэргүй буюу илүү хаалт байсан гэсэн үг
+	return len(stk) == 0
 }
 ```

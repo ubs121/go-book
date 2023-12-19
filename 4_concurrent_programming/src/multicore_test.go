@@ -1,25 +1,45 @@
 package concurrency
 
 import (
+	"strconv"
 	"testing"
 	"time"
 )
 
-func doJob(quit chan int) {
-	// тодорхой ажил гүйцэтгэхийг 'time.Sleep'-ээр орлуулав
+type Request struct{ Name string }
+type Response struct{ Data string }
+
+func doJob(request *Request, ch chan *Response) {
+	// 200 ms-н ажил
 	time.Sleep(time.Millisecond * 200)
-	quit <- 1
+
+	// хариу илгээх
+	ch <- &Response{Data: request.Name + " дууслаа"}
+}
+
+func main() {
+	jobChan := make(chan *Response)
+
+	// ажлын жагсаалт
+	n := 60
+	var requests []Request
+	for i := 0; i < n; i++ {
+		requests = append(requests, Request{"task" + strconv.Itoa(i)})
+	}
+
+	// параллел давталт
+	for _, req := range requests {
+		req1 := req
+		go doJob(&req1, jobChan)
+	}
+
+	// бүх функцээс өгөгдөл хүлээх
+	for i := 0; i < len(requests); i++ {
+		resp := <-jobChan
+		println(resp.Data)
+	}
 }
 
 func TestMulticore(t *testing.T) {
-	routineQuit := make(chan int)
-
-	for i := 0; i < 50; i++ {
-		go doJob(routineQuit)
-	}
-
-	// бүх функцээс дууссан дохио хүлээх
-	for i := 0; i < 50; i++ {
-		<-routineQuit
-	}
+	main()
 }
