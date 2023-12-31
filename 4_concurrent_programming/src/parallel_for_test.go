@@ -3,21 +3,9 @@ package concurrency
 import (
 	"strconv"
 	"testing"
-	"time"
 )
 
-type Request struct{ Name string }
-type Response struct{ Data string }
-
-func doJob(request *Request, ch chan *Response) {
-	// 200 ms-н ажил
-	time.Sleep(time.Millisecond * 200)
-
-	// хариу илгээх
-	ch <- &Response{Data: request.Name + " дууслаа"}
-}
-
-func main() {
+func parallelFor() {
 	jobChan := make(chan *Response)
 
 	// ажлын жагсаалт
@@ -29,8 +17,10 @@ func main() {
 
 	// параллел давталт
 	for _, req := range requests {
-		req1 := req
-		go doJob(&req1, jobChan)
+		go func(r *Request) {
+			reply := doJob(r)
+			jobChan <- reply
+		}(&req)
 	}
 
 	// бүх функцээс өгөгдөл хүлээх
@@ -41,5 +31,5 @@ func main() {
 }
 
 func TestMulticore(t *testing.T) {
-	main()
+	parallelFor()
 }

@@ -11,6 +11,7 @@ func f(n int) {
 		fmt.Println(i)
 	}
 
+	// a work similation
 	time.Sleep(3 * time.Second)
 }
 

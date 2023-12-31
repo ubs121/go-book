@@ -101,6 +101,52 @@ func PostorderTraversal(root *TreeNode) []int {
 	return ret
 }
 
+func PreOrder(node *TreeNode) {
+	if node != nil {
+		fmt.Printf("%d ", node.Value)
+		PreOrder(node.Left)
+		PreOrder(node.Right)
+	}
+}
+
+func InOrder(node *TreeNode) {
+	if node != nil {
+		InOrder(node.Left)
+		fmt.Printf("%d ", node.Value)
+		InOrder(node.Right)
+	}
+}
+
+func PostOrder(node *TreeNode) {
+	if node != nil {
+		PostOrder(node.Left)
+		PostOrder(node.Right)
+		fmt.Printf("%d ", node.Value)
+	}
+}
+
+func TestTraversePrint(t *testing.T) {
+	root := &TreeNode{
+		Value: 5,
+		Left: &TreeNode{
+			Value: 4,
+			Left:  &TreeNode{Value: 3},
+			Right: &TreeNode{Value: 1},
+		},
+		Right: &TreeNode{
+			Value: 2,
+			Left:  &TreeNode{Value: 7},
+			Right: nil,
+		},
+	}
+	PreOrder(root)
+	println()
+	InOrder(root)
+	println()
+	PostOrder(root)
+	println()
+}
+
 func LevelOrderTraversal(root *Node) [][]string { // Data from each level is being returned as a separate list
 	if root == nil {
 		return nil

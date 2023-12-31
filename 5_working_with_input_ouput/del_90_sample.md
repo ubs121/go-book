@@ -223,7 +223,7 @@
           select {
           case fileName := <-ch:
               fmt.Println(fileName)
-              // TODO: энд холбоос хайх хэсэг байна
+              // энд холбоос хайх хэсэг байна
           }
       }
    }

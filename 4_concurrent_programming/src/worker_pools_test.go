@@ -5,16 +5,6 @@ import (
 	"sync"
 )
 
-type Job interface {
-	ID() string
-	Do() error
-}
-
-type JobResult struct {
-	JobID string
-	Err   error
-}
-
 type WorkerPool interface {
 	AddWorkers(count int)
 	RemoveWorkers(count int)
