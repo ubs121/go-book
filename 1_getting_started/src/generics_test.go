@@ -16,10 +16,11 @@ func Reverse[T any](arr []T) {
 
 func TestReverse(t *testing.T) {
 	intArr := []int{1, 2, 3, 4, 5, 6}
-	Reverse(intArr)
-	fmt.Println(intArr)
-
 	strArr := []string{"red", "green", "blue"}
+
+	Reverse(intArr)
 	Reverse(strArr)
+
+	fmt.Println(intArr)
 	fmt.Println(strArr)
 }

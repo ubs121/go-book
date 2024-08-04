@@ -222,7 +222,7 @@ func handleClient(conn net.Conn) {
 func (c *TCPConn) SetTimeout(nsec int64) os.Error
 ```
 
-Клиент, серверийн холболтыг “амьд” байлгах шаардлага гарч болно. Үүнд дараах функцийг ашиглаж болно.
+Клиент, серверийн холболтыг "амьд" байлгах шаардлага гарч болно. Үүнд дараах функцийг ашиглаж болно.
 
 ```go
 func (c *TCPConn) SetKeepAlive(keepalive bool) os.Error

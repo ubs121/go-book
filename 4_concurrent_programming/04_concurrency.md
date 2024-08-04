@@ -78,7 +78,7 @@ sys	0m0.012s
 
 ```go
 func orderedResults(n int) {
-	// сувгийн жагсаалт
+	// сувгийн слайс үүсгэх
 	results := make([]chan *Response, n)
 
 	for i := 0; i < n; i++ {
@@ -95,7 +95,6 @@ func orderedResults(n int) {
 	// үр дүнг дарааллаар нь цуглуулах
 	for i := 0; i < n; i++ {
 		result := <-results[i]
-
 		fmt.Println("result ", result)
 	}
 }
